@@ -15,7 +15,6 @@ class ProfileController extends Controller
     public function Profile()
     {
         $user = Auth::user();
-        $user->increment('views');
         return response()->json([
             'status' => true,
             'user' => $user
@@ -28,19 +27,31 @@ class ProfileController extends Controller
 
         // Validate the profile photo file
         $request->validate([
-            'fullname' => 'nullable|string|min:3|max:255',
-            'admin_user_category_id' =>['nullable','integer',
-            Rule::exists('admin_user_categories', 'id'),
+            'name' => [
+                'sometimes', // Add this to only validate if the field is present in the request
+                'required',
+                'string',
+                'min:3',
+                'max:255',
             ],
-            'address' => 'nullable|string',
             'avatar' => 'nullable|image|max:2048',
+            'username' => [
+                'sometimes', // Add this to only validate if the field is present in the request
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                Rule::unique('users')->ignore(Auth::user()->id),
+            ],
         ]);
 
-        if($request->input('admin_user_category_id')){
-            $user->admin_user_category_id = $request->input('admin_user_category_id');
+        // $user->name = $request->input('name');
+        if ($request->input('name')) {
+            $user->name = $request->input('name');
         }
-        $user->fullname = $request->input('fullname');
-        $user->address = $request->input('address');
+        if ($request->input('username')) {
+            $user->username = $request->input('username');
+        }
 
         if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
