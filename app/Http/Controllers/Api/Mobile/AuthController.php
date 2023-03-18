@@ -175,7 +175,7 @@ class AuthController extends Controller
                     }
                 },
             ],
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
