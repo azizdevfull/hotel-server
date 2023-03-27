@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\HotelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\AuthController;
@@ -23,8 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-
 Route::prefix('mobile')->group(function () {
+
+    Route::get('/hotels', [HotelController::class, 'index']);
+    Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
+
+
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 

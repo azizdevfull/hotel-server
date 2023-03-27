@@ -6,12 +6,14 @@ use App\Models\Hotel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class Photos extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
 
-    public function hotels(){
-        return $this->hasMany(Hotel::class);
+    protected $fillable = ['filename', 'hotel_id', 'url'];
+
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
     }
 }

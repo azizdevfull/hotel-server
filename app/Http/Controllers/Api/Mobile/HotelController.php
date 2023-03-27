@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Mobile;
 
-use App\Http\Controllers\Controller;
+use App\Http\Resources\HotelResource;
+use App\Models\Hotel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HotelController extends Controller
 {
@@ -12,7 +14,11 @@ class HotelController extends Controller
      */
     public function index()
     {
-        //
+        $hotels = Hotel::all();
+        return response()->json([
+           'status' =>'success',
+            'data' => HotelResource::collection($hotels)
+        ]);
     }
 
     /**
