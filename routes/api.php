@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
-use App\Http\Controllers\Api\Mobile\AuthController;
-use App\Http\Controllers\Api\Mobile\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Mobile\AuthController;
+use App\Http\Controllers\Api\Mobile\ProfileController;
+use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
+use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,11 @@ Route::prefix('mobile')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', [ProfileController::class, 'Profile']);
         Route::post('/profile-update', [ProfileController::class, 'ProfileUpdate']);
+    });
+
+    // Admin Routes
+    Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
+        Route::apiResource('categories', CategoryController::class);
     });
 
 });
