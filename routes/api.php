@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\HomeController;
 use App\Http\Controllers\Api\Mobile\HotelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('mobile')->group(function () {
 
+    Route::get('/home', [HomeController::class, 'home']);
     Route::get('/hotels', [HotelController::class, 'index']);
     Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
 
