@@ -61,14 +61,17 @@ class HotelController extends Controller
         // }
         $hotel->save();
 
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $result = Cloudinary::upload(fopen($photo->getRealPath(), 'r'));
-                $hotel->photos()->create([
-                    'url' => $result->getSecurePath()
-                ]);
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    $result = Cloudinary::upload($photo->getRealPath(), ['folder' => 'hotels']);
+                    $public_id = $result->getPublicId();
+                    $url = $result->getSecurePath();
+                    $hotel->photos()->create([
+                        "url"=>$url,
+                        "public_id"=>$public_id
+                    ]);
+                }
             }
-        }
         return response([
             'status' => true,
             'message' => 'Hotel created successfully',
@@ -100,14 +103,100 @@ class HotelController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+    
+        if ($validator->fails()) {
+            return response([
+                'status' => 'error',
+                'message' => $validator->errors()
+            ], 422);
+        }
+    
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Hotel not found'
+            ], 404);
+        }
+    
+        $user = Auth::user();
+        if ($hotel->user_id !== $user->id) {
+            return response([
+                'status' => 'error',
+                'message' => 'You are not authorized to update this hotel'
+            ], 403);
+        }
+    
+        $hotel->name = $request->name;
+        $hotel->price = $request->price;
+        $hotel->description = $request->description;
+        $hotel->category_id = $request->category_id;
+        $hotel->save();
+    
+        if ($request->hasFile('photos')) {
+            // Delete old photos
+            foreach ($hotel->photos as $photo) {
+                Cloudinary::destroy($photo->public_id);
+                $photo->delete();
+            }
+    
+            // Upload new photos
+                foreach ($request->file('photos') as $photo) {
+                    $result = Cloudinary::upload($photo->getRealPath(), ['folder' => 'hotels']);
+                    $public_id = $result->getPublicId();
+                    $url = $result->getSecurePath();
+                    $hotel->photos()->create([
+                        "url" => $url,
+                        "public_id" => $public_id
+                    ]);
+                }
+        }
+    
+        return response([
+            'status' => true,
+            'message' => 'Hotel updated successfully',
+        ], 200);
     }
+    
+    
+    
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $hotel = Hotel::find($id);
+        if(!$hotel){
+            return response()->json([
+              'status' => false,
+              'message' => 'Hotel not found'
+            ], 404);
+        }
+        $user = Auth::user();
+
+        if ($hotel->user_id !== $user->id) {
+            return response([
+               'status' => 'error',
+               'message' => 'You are not authorized to delete this hotel'
+            ], 403);
+        }
+        foreach ($hotel->photos as $photo) {
+            Cloudinary::destroy($photo->public_id);
+            $photo->delete();
+        }
+        $hotel->delete();
+        return response([
+           'status' => true,
+           'message' => 'Hotel deleted successfully'
+        ], 200);
     }
 }

@@ -48,6 +48,7 @@ Route::prefix('mobile')->group(function () {
         // Hotel Routes
         Route::post('/hotels', [HotelController::class, 'store']);
         Route::post('/hotels/{hotel}', [HotelController::class, 'update']);
+        Route::put('/hotels/{hotel}', [HotelController::class, 'update']);
         Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy']);
     });
 

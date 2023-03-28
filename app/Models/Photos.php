@@ -10,7 +10,7 @@ class Photos extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['filename', 'hotel_id', 'url'];
+    protected $fillable = ['filename', 'hotel_id', 'url', 'public_id'];
 
     public function hotel()
     {

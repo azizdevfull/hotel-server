@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
             $table->string('url');
+            $table->string('public_id');
             $table->timestamps();
         });
     }
