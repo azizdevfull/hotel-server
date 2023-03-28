@@ -44,6 +44,11 @@ Route::prefix('mobile')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', [ProfileController::class, 'Profile']);
         Route::post('/profile-update', [ProfileController::class, 'ProfileUpdate']);
+
+        // Hotel Routes
+        Route::post('/hotels', [HotelController::class, 'store']);
+        Route::post('/hotels/{hotel}', [HotelController::class, 'update']);
+        Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy']);
     });
 
     // Admin Routes
