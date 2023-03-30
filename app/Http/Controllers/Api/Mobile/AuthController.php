@@ -16,6 +16,8 @@ class AuthController extends Controller
 {
     public function register(Request $request)
 {
+    User::whereNull('phone_verified_at')->where('created_at', '<=', now()->subMinute(5))->delete();
+
     $validator = Validator::make($request->all(), [
         'name' => 'nullable|string|min:3|max:255',
         'username' => 'required|string|min:3|max:255|unique:users',
