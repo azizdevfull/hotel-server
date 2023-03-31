@@ -15,6 +15,7 @@ class ProfileController extends Controller
     public function Profile()
     {
         $user = Auth::user();
+        $user->increment('views');
         return response()->json([
             'status' => true,
             'user' => $user

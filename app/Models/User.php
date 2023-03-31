@@ -25,7 +25,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'admin_user_category_id',
-        'avatar'
+        'avatar',
+        'views'
     ];
 
     /**
