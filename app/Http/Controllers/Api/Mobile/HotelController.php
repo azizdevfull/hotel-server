@@ -51,14 +51,14 @@ class HotelController extends Controller
         $hotel->description = $request->description;
         $hotel->category_id = $request->category_id;
         $hotel->user_id = $user->id;
-        // if ($user->product_number <= 0) {
-        //     return response([
-        //         'status' => false,
-        //         'message' => 'User does not have enough money to create a new product'
-        //     ], 422);
-        // }else{
-        //     $user->decrement('product_number');
-        // }
+        if ($user->hotel_number <= 0) {
+            return response([
+                'status' => false,
+                'message' => 'User does not have enough money to create a new hotel'
+            ], 422);
+        }else{
+            $user->decrement('hotel_number');
+        }
         $hotel->save();
 
             if ($request->hasFile('photos')) {
