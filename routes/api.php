@@ -48,6 +48,9 @@ Route::prefix('mobile')->group(function () {
         Route::get('/profile', [ProfileController::class, 'Profile']);
         Route::post('/profile-update', [ProfileController::class, 'ProfileUpdate']);
 
+        // Payment Routes
+        Route::post('/pay', [PaymentController::class, 'pay']);
+
         // Hotel Routes
         Route::post('/hotels', [HotelController::class, 'store']);
         Route::post('/hotels/{hotel}', [HotelController::class, 'update']);
