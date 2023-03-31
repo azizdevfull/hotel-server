@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\Mobile\HomeController;
-use App\Http\Controllers\Api\Mobile\HotelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\AuthController;
+use App\Http\Controllers\Api\Mobile\HomeController;
+use App\Http\Controllers\Api\Mobile\HotelController;
 use App\Http\Controllers\Api\Mobile\ProfileController;
 use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
+use App\Http\Controllers\Api\Mobile\Admin\PaymentSecretController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
 
 /*
@@ -57,6 +58,7 @@ Route::prefix('mobile')->group(function () {
     // Admin Routes
     Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('payment-secrets', PaymentSecretController::class);
     });
 
 });

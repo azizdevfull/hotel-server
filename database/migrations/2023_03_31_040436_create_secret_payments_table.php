@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('views')->default(0);
-            $table->integer('hotel_number')->default(0);
+        Schema::create('secret_payments', function (Blueprint $table) {
+            $table->id();
+            $table->string('secret_code')->unique();
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['views', 'hotel_number']);
-        });
+        Schema::dropIfExists('secret_payments');
     }
 };

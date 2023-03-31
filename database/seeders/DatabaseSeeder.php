@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'phone' => '+998991903704',
             'phone_verified_at' => now(),
             'password' => Hash::make('password'),
-            'role' => 0,
+            'role' => 1,
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
