@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Resources\ProfileResource;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
 
@@ -102,7 +103,7 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'Phone number verified',
             'token' => $token,
-            'user' => $user
+            'user' => new ProfileResource($user),
         ], 200);
     }
 
@@ -209,7 +210,7 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'Login successfully!',
             'token' => $token,
-            'user' => $user
+            'user' => new ProfileResource($user),
         ], 200);
     }
 

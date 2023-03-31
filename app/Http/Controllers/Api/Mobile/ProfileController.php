@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Mobile;
 
+use App\Http\Resources\ProfileResource;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -18,7 +19,7 @@ class ProfileController extends Controller
         $user->increment('views');
         return response()->json([
             'status' => true,
-            'user' => $user
+            'user' => new ProfileResource($user),
         ]);
     }
 
@@ -73,7 +74,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully.',
-            'user' => $user
+            'user' => new ProfileResource($user),
         ], 200);
     }
 
