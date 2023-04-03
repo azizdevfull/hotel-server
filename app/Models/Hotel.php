@@ -28,4 +28,9 @@ class Hotel extends Model
     {
         return $this->hasMany(Photos::class);
     }
+
+    public static function search($term)
+    {
+        return self::where('name', 'LIKE', "%$term%")->get();
+    }
 }
