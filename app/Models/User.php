@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Hotel;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -51,6 +52,10 @@ class User extends Authenticatable
     public function adminUserCategory()
     {
         return $this->belongsTo(AdminUserCategory::class);
+    }
+
+    public function hotels(){
+        return $this->hasMany(Hotel::class);
     }
 
     // public function userAvatarUrl()

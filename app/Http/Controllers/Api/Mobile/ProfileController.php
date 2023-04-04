@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\Mobile;
 
-use App\Http\Resources\ProfileResource;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HotelResource;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ProfileResource;
 use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
@@ -76,6 +78,25 @@ class ProfileController extends Controller
             'message' => 'Profile updated successfully.',
             'user' => new ProfileResource($user),
         ], 200);
+    }
+
+    public function show($id){
+        $user = User::find($id);
+        // dd($hotels);
+        if (!$user) {
+            return response([
+                'status' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+        $hotels = $user->hotels;
+        
+        return response()->json([
+            'status' => true,
+            'user' => new ProfileResource($user),
+            'hotels' => HotelResource::collection($hotels)
+        ]);
+
     }
 
 

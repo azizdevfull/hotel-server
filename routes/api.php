@@ -49,6 +49,8 @@ Route::prefix('mobile')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     Route::post('/resend-code', [AuthController::class, 'resendSms']);
 
+    Route::get('/profile/{user}', [ProfileController::class, 'show']);
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/profile', [ProfileController::class, 'Profile']);
         Route::post('/profile-update', [ProfileController::class, 'ProfileUpdate']);
