@@ -7,11 +7,13 @@ use App\Http\Controllers\Api\Mobile\HomeController;
 use App\Http\Controllers\Api\Mobile\HotelController;
 use App\Http\Controllers\Api\Mobile\PaymentController;
 use App\Http\Controllers\Api\Mobile\ProfileController;
+use App\Http\Controllers\Api\Mobile\HotelSearchController;
+use App\Http\Controllers\Api\Mobile\UserCategoryController;
+use App\Http\Controllers\Api\Mobile\Admin\ReklamaController;
 use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
 use App\Http\Controllers\Api\Mobile\Admin\PaymentSecretController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
-use App\Http\Controllers\Api\Mobile\HotelSearchController;
-use App\Http\Controllers\Api\Mobile\UserCategoryController;
+use App\Models\Reklama;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,8 @@ Route::prefix('mobile')->group(function () {
     Route::get('/categories', [UserCategoryController::class, 'index']);
     Route::get('/hotels', [HotelController::class, 'index']);
     Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
+    
+    Route::get('/reklama', [ReklamaController::class, 'index']);
 
     // Hotel Search
     Route::get('/search', [HotelSearchController::class, 'index']);
@@ -71,6 +75,10 @@ Route::prefix('mobile')->group(function () {
     Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('payment-secrets', PaymentSecretController::class);
+
+        // Reklama Routes
+        Route::apiResource('reklama', ReklamaController::class);
+        Route::post('reklama/{reklama}', [ReklamaController::class, 'update']);
     });
 
 });
