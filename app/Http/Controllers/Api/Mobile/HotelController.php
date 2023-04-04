@@ -19,7 +19,8 @@ class HotelController extends Controller
     {
         $perPage = 20;
         $query = $request->query('q');
-        $page = $request->query('page') ?? 1;
+        $page = intval($request->query('page')) ?? 1;
+
         $offset = ($page - 1) * $perPage;
         
         $hotels = Hotel::when($query, function($q, $query) {
