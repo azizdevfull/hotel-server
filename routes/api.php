@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
 use App\Http\Controllers\Api\Mobile\Admin\PaymentSecretController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
 use App\Http\Controllers\Api\Mobile\HotelSearchController;
+use App\Http\Controllers\Api\Mobile\UserCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('mobile')->group(function () {
 
     Route::get('/home', [HomeController::class, 'home']);
+    Route::get('/categories', [UserCategoryController::class, 'index']);
     Route::get('/hotels', [HotelController::class, 'index']);
     Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
 
