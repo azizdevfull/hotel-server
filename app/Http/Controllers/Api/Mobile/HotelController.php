@@ -15,13 +15,48 @@ class HotelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = Hotel::all();
+        $perPage = 20;
+        $query = $request->query('q');
+        $page = $request->query('page') ?? 1;
+        $offset = ($page - 1) * $perPage;
+        
+        $hotels = Hotel::when($query, function($q, $query) {
+            return $q->where('name', 'like', "%$query%");
+        })
+        ->offset($offset)
+        ->limit($perPage)
+        ->get();
+        
+        $total = Hotel::when($query, function($q, $query) {
+            return $q->where('name', 'like', "%$query%");
+        })
+        ->count();
+        
+        $lastPage = ceil($total / $perPage);
+        
+        $prevPageUrl = $page > 1 ? $request->fullUrlWithQuery(['page' => $page - 1]) : null;
+        $nextPageUrl = $page < $lastPage ? $request->fullUrlWithQuery(['page' => $page + 1]) : null;
+        
         return response()->json([
-           'status' =>'success',
-            'data' => HotelResource::collection($hotels)
-        ]);
+            'status' => true,
+            'message' => "",
+            'data' => [
+                'item' => HotelResource::collection($hotels),
+                '_links' => [                
+                    'prevPageUrl' => $prevPageUrl,
+                    'nextPageUrl' => $nextPageUrl
+            ],
+            '_meta' =>[
+                'total' => $total,
+                'perPage' => $perPage,
+                'currentPage' => $page,
+                'lastPage' => $lastPage,
+            ]
+
+            ]
+        ], 200);
     }
 
     /**
