@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Mobile;
 
 use App\Models\Hotel;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
+        $categories = Category::all();
         $perPage = 20;
         $query = $request->query('q');
         $page = intval($request->query('page')) ?? 1;
@@ -36,7 +38,7 @@ class HotelController extends Controller
         ->count();
         
         $lastPage = ceil($total / $perPage);
-        
+    
         $prevPageUrl = $page > 1 ? $request->fullUrlWithQuery(['page' => $page - 1]) : null;
         $nextPageUrl = $page < $lastPage ? $request->fullUrlWithQuery(['page' => $page + 1]) : null;
         
@@ -56,7 +58,8 @@ class HotelController extends Controller
                 'lastPage' => $lastPage,
             ]
 
-            ]
+            ],
+            'categories' => $categories
         ], 200);
     }
 
