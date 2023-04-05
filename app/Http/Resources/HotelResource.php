@@ -22,6 +22,8 @@ class HotelResource extends JsonResource
             'category' => $this->category->name,
             'user' => $this->user->username,
             'views' => $this->views,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'photos' => $this->photos->map(function ($photo) {
