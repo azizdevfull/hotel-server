@@ -16,4 +16,20 @@ class UserCategoryController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function show($id){
+        $category = Category::find($id);
+        if(!$category){
+            return response()->json([
+                'status' => false,
+                'message' => 'Category not found',
+            ]);
+        }
+        return response()->json([
+            'status' => true,
+            'category' => $category,
+            'hotels' => $category->hotels
+        ]);
+    }
+
 }
