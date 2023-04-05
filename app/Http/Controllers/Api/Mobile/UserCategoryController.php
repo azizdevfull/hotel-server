@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Mobile;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HotelResource;
 
 class UserCategoryController extends Controller
 {
@@ -28,7 +29,7 @@ class UserCategoryController extends Controller
         return response()->json([
             'status' => true,
             'category' => $category,
-            'hotels' => $category->hotels
+            'hotels' => new HotelResource($category->hotels)
         ]);
     }
 
