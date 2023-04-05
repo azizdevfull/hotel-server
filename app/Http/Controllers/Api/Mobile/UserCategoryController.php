@@ -28,7 +28,12 @@ class UserCategoryController extends Controller
         }
         return response()->json([
             'status' => true,
-            'category' => $category,
+            'category' => [
+              'id' =>  $category->id,
+              'name' => $category->name,
+              'created_at' => $category->created_at,
+              'updated_at' => $category->updated_at
+            ],
             'hotels' => HotelResource::collection($category->hotels)
         ]);
     }
