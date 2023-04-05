@@ -29,7 +29,7 @@ class UserCategoryController extends Controller
         return response()->json([
             'status' => true,
             'category' => $category,
-            'hotels' => new HotelResource($category->hotels)
+            'hotels' => HotelResource::collection($category->hotels)
         ]);
     }
 
