@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api\Mobile\Admin;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\Admin\UsersResource;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class AdminUsersController extends Controller
 {
@@ -27,15 +31,54 @@ class AdminUsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users|max:255',
+            'phone' => 'required|string|unique:users|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+        $password = Hash::make($validatedData['password']);
+        $validatedData['password'] = $password;
+
+        $user = User::create($validatedData);
+
+        return new UsersResource($user);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    // public function show(string $id)
+    // {
+    //     $user = User::find($id);
+    //     if(!$user){
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'User not found!'
+    //         ]);
+    //     }
+    //     return response()->json([
+    //         'status' => true,
+    //         'user' => new UsersResource($user),
+    //     ]);
+    // }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found!'
+            ]);
+        }
+        return response()->json([
+            'status' => true,
+            'user' => new UsersResource($user),
+        ]);
     }
 
     /**
@@ -43,7 +86,53 @@ class AdminUsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'User Not Found!',
+            ]);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'username' => ['sometimes', 'required', 'string', Rule::unique('users')->ignore($id), 'max:255'],
+            'phone' => ['sometimes', 'required', 'string', Rule::unique('users')->ignore($id), 'max:255'],
+            'hotel_number' => 'sometimes|required|integer',
+            'phone_verified_at' => 'sometimes|date',
+            'role' => 'sometimes|integer',
+            'avatar' => 'nullable|image|max:2048',
+            'views' => 'sometimes|required|integer',
+            'password' => 'sometimes|required|string|min:6',
+        ]);
+
+
+
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatarName = Str::random(20).'.'.$avatar->getClientOriginalExtension();
+
+            // Delete old avatar if it exists
+            if ($user->avatar) {
+                Cloudinary::destroy($user->avatar);
+                $user->avatar = null;
+            }
+
+            // Upload avatar to Cloudinary
+            $uploadedFileUrl = Cloudinary::upload($avatar->getRealPath())->getSecurePath();
+
+            $validatedData['avatar'] = $uploadedFileUrl;
+        }
+
+        if (isset($validatedData['password'])) {
+            $password = Hash::make($validatedData['password']);
+            $validatedData['password'] = $password;
+        }
+
+        $user->update($validatedData);
+
+        return new UsersResource($user);
     }
 
     /**
@@ -51,6 +140,25 @@ class AdminUsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+    
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'User Not Found!',
+            ]);
+        }
+    
+        // Delete avatar if it exists
+        if ($user->avatar) {
+            Cloudinary::destroy($user->avatar);
+        }
+    
+        $user->delete();
+    
+        return response()->json([
+            'status' => true,
+            'message' => 'User deleted successfully!',
+        ]);
     }
 }

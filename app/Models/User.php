@@ -27,7 +27,10 @@ class User extends Authenticatable
         'password',
         'admin_user_category_id',
         'avatar',
-        'views'
+        'views',
+        'role',
+        'phone_verified_at',
+        'hotel_number',
     ];
 
     /**
