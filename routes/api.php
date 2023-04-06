@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Reklama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Mobile\AuthController;
@@ -11,9 +12,9 @@ use App\Http\Controllers\Api\Mobile\HotelSearchController;
 use App\Http\Controllers\Api\Mobile\UserCategoryController;
 use App\Http\Controllers\Api\Mobile\Admin\ReklamaController;
 use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
+use App\Http\Controllers\Api\Mobile\Admin\AdminUsersController;
 use App\Http\Controllers\Api\Mobile\Admin\PaymentSecretController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
-use App\Models\Reklama;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,10 @@ Route::prefix('mobile')->group(function () {
         // Reklama Routes
         Route::apiResource('reklama', ReklamaController::class);
         Route::post('reklama/{reklama}', [ReklamaController::class, 'update']);
+
+        // Users Routes
+        Route::post('users/{user}', [AdminUsersController::class, 'update']);
+        Route::apiResource('users', AdminUsersController::class);
     });
 
 });
