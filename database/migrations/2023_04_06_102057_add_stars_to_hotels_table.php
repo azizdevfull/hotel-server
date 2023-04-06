@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hotels', function (Blueprint $table) {
-            //
+            $table->decimal('stars', 3, 1)->default(0.0)->unsigned();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('hotels', function (Blueprint $table) {
-            //
+            $table->dropColumn('stars');
         });
     }
 };

@@ -76,6 +76,7 @@ class HotelController extends Controller
             'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'longitude' => 'required|numeric',
             'latitude' => 'required|numeric',
+            'stars' => 'required|numeric|between:0,5',
         ]);
 
         if ($validator->fails()) {
@@ -93,6 +94,7 @@ class HotelController extends Controller
         $hotel->category_id = $request->category_id;
         $hotel->longitude = $request->longitude;
         $hotel->latitude = $request->latitude;
+        $hotel->stars = $request->stars;
         $hotel->user_id = $user->id;
         if ($user->hotel_number <= 0) {
             return response([
@@ -154,6 +156,7 @@ class HotelController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
+            'stars' => 'numeric|between:0,5',
         ]);
     
         if ($validator->fails()) {
@@ -189,6 +192,9 @@ class HotelController extends Controller
         }
         if($request->latitude){
             $hotel->latitude = $request->latitude;
+        }
+        if($request->stars){
+            $hotel->stars = $request->stars;
         }
         $hotel->save();
     

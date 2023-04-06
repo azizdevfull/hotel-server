@@ -22,6 +22,7 @@ class HotelResource extends JsonResource
             'category' => $this->category->name,
             'user' => $this->user->username,
             'views' => $this->views,
+            'stars' => floatval($this->stars),
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,
             'created_at' => $this->created_at->toDateTimeString(),
