@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Mobile\Admin\AdminHotelsController;
 use App\Models\Reklama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +86,10 @@ Route::prefix('mobile')->group(function () {
         // Users Routes
         Route::post('users/{user}', [AdminUsersController::class, 'update']);
         Route::apiResource('users', AdminUsersController::class);
+
+        // Hotels Routes
+        Route::post('hotels/{hotels}', [AdminHotelsController::class, 'update']);
+        Route::apiResource('hotels', AdminHotelsController::class);
     });
 
 });
