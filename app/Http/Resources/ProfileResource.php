@@ -21,6 +21,13 @@ class ProfileResource extends JsonResource
         }else{
             $status = 'active';
         }
+
+        if($this->blocked > 0){
+            $blocked = "Blocked";
+        }else{
+            $blocked = "Unblocked";
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -32,6 +39,7 @@ class ProfileResource extends JsonResource
             'role' => $this->role,
             'avatar' => $this->avatar,
             'views' => $this->views,
+            'blocked' => $blocked,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
 
