@@ -104,6 +104,7 @@ class AdminUsersController extends Controller
             'role' => 'sometimes|integer',
             'avatar' => 'nullable|image|max:2048',
             'views' => 'sometimes|required|integer',
+            'blocked' => 'sometimes|required|integer',
             'password' => 'sometimes|required|string|min:6',
         ]);
 

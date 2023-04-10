@@ -101,6 +101,11 @@ class HotelController extends Controller
                 'status' => false,
                 'message' => 'User does not have enough money to create a new hotel'
             ], 422);
+        }else if($user->blocked > 0){
+            return response([
+                'status' => false,
+                'message' => 'You are blocked by Admin'
+            ], 422);
         }else{
             $user->decrement('hotel_number');
         }

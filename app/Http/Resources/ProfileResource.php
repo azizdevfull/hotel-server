@@ -16,7 +16,7 @@ class ProfileResource extends JsonResource
     public function toArray($request)
     {
 
-        if($this->hotel_number <= 0 ){
+        if($this->hotel_number <= 0 || $this->blocked > 0 ){
             $status = 'deactive';
         }else{
             $status = 'active';

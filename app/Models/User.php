@@ -31,6 +31,7 @@ class User extends Authenticatable
         'role',
         'phone_verified_at',
         'hotel_number',
+        'blocked',
     ];
 
     /**

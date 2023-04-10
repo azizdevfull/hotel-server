@@ -14,10 +14,15 @@ class UsersResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->hotel_number <= 0 ){
+        if($this->hotel_number <= 0 || $this->blocked > 0 ){
             $status = 'deactive';
         }else{
             $status = 'active';
+        }
+        if($this->blocked > 0){
+            $blocked = "Blocked";
+        }else{
+            $blocked = "Unblocked";
         }
         return [
             'id' => $this->id,
@@ -32,6 +37,7 @@ class UsersResource extends JsonResource
             'updated_at' => $this->updated_at->toDateTimeString(),
             'avatar' => $this->avatar,
             'views' => $this->views,
+            'blocked' => $blocked,
         ];
     }
 }
