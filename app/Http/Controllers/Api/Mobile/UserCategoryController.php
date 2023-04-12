@@ -34,7 +34,7 @@ class UserCategoryController extends Controller
               'created_at' => $category->created_at,
               'updated_at' => $category->updated_at
             ],
-            'hotels' => HotelResource::collection($category->hotels)
+            'categoryList' => HotelResource::collection($category->hotels)
         ]);
     }
 
