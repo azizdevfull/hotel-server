@@ -37,7 +37,7 @@ Route::prefix('mobile')->group(function () {
 
     Route::get('/home', [HomeController::class, 'home']);
     Route::get('/categories', [UserCategoryController::class, 'index']);
-    Route::get('/categories/{category}', [UserCategoryController::class, 'show']);
+    Route::get('/categories/{category}', [UserCategoryController::class, 'showCategory']);
     Route::get('/hotels', [HotelController::class, 'index']);
     Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
     
