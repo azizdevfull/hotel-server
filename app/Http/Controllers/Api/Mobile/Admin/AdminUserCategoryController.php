@@ -32,7 +32,7 @@ class AdminUserCategoryController extends Controller
         $adminUserCategory = AdminUserCategory::create($validatedData);
 
         return response()->json([
-            'message' => 'Admin user category created successfully',
+            'message' => __('ucategory.create_success'),
             'data' => $adminUserCategory
         ]);
     }
@@ -54,6 +54,13 @@ class AdminUserCategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $adminUserCategory = AdminUserCategory::find($id);
+
+        if(!$adminUserCategory){
+            return response()->json([
+                'message' => __('ucategory.not_found'),
+            ]);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|unique:admin_user_categories,name,' . $adminUserCategory->id . '|max:255',
         ]);
@@ -61,7 +68,7 @@ class AdminUserCategoryController extends Controller
         $adminUserCategory->update($validatedData);
 
         return response()->json([
-            'message' => 'Admin user category updated successfully',
+            'message' => __('ucategory.update_success'),
             'data' => $adminUserCategory
         ]);
     }
@@ -72,10 +79,17 @@ class AdminUserCategoryController extends Controller
     public function destroy(string $id)
     {
         $adminUserCategory = AdminUserCategory::find($id);
+        
+        if(!$adminUserCategory){
+            return response()->json([
+                'message' => __('ucategory.not_found'),
+            ]);
+        }
+        
         $adminUserCategory->delete();
 
         return response()->json([
-            'message' => 'Admin user category deleted successfully'
+            'message' => __('ucategory.destroy_success')
         ]);
     }
 }

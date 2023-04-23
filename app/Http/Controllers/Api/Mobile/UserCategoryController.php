@@ -24,7 +24,7 @@ class UserCategoryController extends Controller
         if(!$category){
             return response()->json([
                 'status' => false,
-                'message' => 'Category not found',
+                'message' => __('category.not_found'),
             ]);
         }
         return response()->json([
@@ -45,7 +45,7 @@ class UserCategoryController extends Controller
         if (!$category) {
             return response()->json([
                 'status' => false,
-                'message' => 'Category Not Found!',
+                'message' => __('category.not_found'),
             ], 404);
         }
     
