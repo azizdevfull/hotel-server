@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::prefix('mobile')->group(function () {
+Route::middleware('localization')->prefix('mobile')->group(function () {
 
     Route::get('/home', [HomeController::class, 'home']);
     Route::get('/categories', [UserCategoryController::class, 'index']);

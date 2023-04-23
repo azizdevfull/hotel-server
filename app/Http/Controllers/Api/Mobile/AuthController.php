@@ -43,12 +43,12 @@ class AuthController extends Controller
     $eskiz->requestAuthLogin();
     $result = $eskiz->requestSmsSend(
         '4546',
-        'Your verification code: '.$code,
+        'Sizning maxsus tasdiqlovchi kodingiz: ' .$code. PHP_EOL .' Kodni hech kimga bermang!',
         $request->phone,
         '1', // your-message-identity, a special identity to message
         ''
     );
-    if ($result) {
+    if ($result->getResponse()->isSuccess() == true) {
         // Save the verification code in the cache
         $key = 'phone_verification_'.$request->phone;
         Cache::put($key, $code, now()->addMinutes(5));
@@ -56,13 +56,13 @@ class AuthController extends Controller
         // Return success response with message
         return response()->json([
             'status' => true,
-            'message' => 'Send SMS Code To Your Phone Number!'
+            'message' => __("auth.sms_sent"),
         ], 200);
     } else {
         // Return error response with message
         return response()->json([
             'status' => false,
-            'message' => 'Failed to send SMS code!'
+            'message' => __("auth.sms_failed")
         ], 500);
     }
 }
@@ -85,7 +85,7 @@ class AuthController extends Controller
         if (!$code || $request->code != $code) {
             return response()->json([
                 'status' => false,
-                'message' => 'Invalid verification code'
+                'message' => __('auth.sms_invalid')
             ], 422);
         }
 
@@ -101,7 +101,7 @@ class AuthController extends Controller
         // Return success response with message and token
         return response()->json([
             'status' => true,
-            'message' => 'Phone number verified',
+            'message' => __('auth.phone_verified'),
             'token' => $token,
             'user' => new ProfileResource($user),
         ], 200);
@@ -123,13 +123,13 @@ class AuthController extends Controller
     if (!$user) {
         return response()->json([
             'status' => false,
-            'message' => 'User not found',
+            'message' => __('auth.user_not_found'),
         ], 404);
     }
     if ($user->phone_verified_at) {
         return response()->json([
             'status' => false,
-            'message' => 'You are already verified'
+            'message' => __('auth.already_verified')
         ], 403);
     }
 
@@ -140,13 +140,13 @@ class AuthController extends Controller
     $eskiz->requestAuthLogin();
     $result = $eskiz->requestSmsSend(
         '4546',
-        'Your verification code: '.$code,
+        'Sizning maxsus tasdiqlovchi kodingiz: ' .$code. PHP_EOL .' Kodni hech kimga bermang!',
         $request->phone,
         '1', // your-message-identity, a special identity to message
         ''
     );
 
-    if ($result) {
+    if ($result->getResponse()->isSuccess == true) {
         // Save the new verification code in the cache
         $key = 'phone_verification_'.$request->phone;
         Cache::put($key, $code, now()->addMinutes(5));
@@ -154,13 +154,13 @@ class AuthController extends Controller
         // Return success response with message
         return response()->json([
             'status' => true,
-            'message' => 'Send SMS Code To Your Phone Number!'
+            'message' => __('auth.sms_sent')
         ], 200);
     } else {
         // Return error response with message
         return response()->json([
             'status' => false,
-            'message' => 'Failed to send SMS code!'
+            'message' => __('auth.sms_failed')
         ], 500);
     }
 }
@@ -174,7 +174,7 @@ class AuthController extends Controller
                 'string',
                 function ($attribute, $value, $fail) {
                     if (!User::where('phone', $value)->orWhere('username', $value)->exists()) {
-                        return $fail('Invalid login details.');
+                        return $fail(__('auth.invalid_input'));
                     }
                 },
             ],
@@ -193,14 +193,14 @@ class AuthController extends Controller
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Invalid login details.'
+                'message' => __('auth.invalid_input')
             ], 401);
         }
 
         if (!$user->phone_verified_at) {
             return response()->json([
                 'status' => false,
-                'message' => 'Phone number not verified'
+                'message' =>  __('auth.phone_not_verified')
             ], 401);
         }
 
@@ -208,7 +208,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Login successfully!',
+            'message' => __('auth.login_success'),
             'token' => $token,
             'user' => new ProfileResource($user),
         ], 200);
@@ -233,7 +233,7 @@ public function forgotPassword(Request $request)
     if (!$user) {
         return response()->json([
             'status' => false,
-            'message' => 'Phone number address not found'
+            'message' => __('auth.phone_not_found')
         ], 404);
     }
 
@@ -255,7 +255,7 @@ public function forgotPassword(Request $request)
         '1', // your-message-identity, a special identity to message
         ''
     );
-    if ($result) {
+    if ($result->getResponse()->isSuccess == true) {
         // Save the verification code in the cache
         $key = 'reset_password_'.$request->phone;
         Cache::put($key, $code, now()->addMinutes(5));
@@ -263,13 +263,13 @@ public function forgotPassword(Request $request)
         // Return success response with message
         return response()->json([
             'status' => true,
-            'message' => 'Send SMS Code To Your Phone Number!'
+            'message' => __('auth.sms_sent')
         ], 200);
     } else {
         // Return error response with message
         return response()->json([
             'status' => false,
-            'message' => 'Failed to send SMS code!'
+            'message' => __('auth.sms_failed')
         ], 500);
     }
 
@@ -300,7 +300,7 @@ public function resetPassword(Request $request)
     if (!$code || $request->code != $code) {
         return response()->json([
             'status' => false,
-            'message' => 'Invalid reset code'
+            'message' => __('auth.invalid_code')
         ], 422);
     }
 
@@ -316,7 +316,7 @@ public function resetPassword(Request $request)
     // Return success response with message and token
     return response()->json([
         'status' => true,
-        'message' => 'Password reset successfully!',
+        'message' => __('auth.reset_success'),
         // 'token' => $token,
         // 'user' => $user
     ], 200);
@@ -335,7 +335,7 @@ $token->delete();
 
 return response()->json([
     'status' => true,
-    'message' => 'User logged out successfully!',
+    'message' => __('auth.logout'),
 ], 200);
 
 }
