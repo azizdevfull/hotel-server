@@ -26,11 +26,10 @@ class RegionController extends Controller
                 'name' => $region->name,
             ];
 
-            if (App::isLocale('en')) {
-                $regionData['name'] = $region->en_name;
-            }
-            else if(App::isLocale('ru')) {
+            if(App::isLocale('ru')) {
                 $regionData['name'] = $region->rus_name;
+            }else{
+                $categoryData['name'] = $region->name;
             }
 
             $data[] = $regionData;
