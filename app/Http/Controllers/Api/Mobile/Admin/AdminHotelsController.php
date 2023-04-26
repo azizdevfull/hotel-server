@@ -33,6 +33,7 @@ class AdminHotelsController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'region_id' => 'required|exists:regions,id',
             'user_id' => 'required|exists:users,id',
             'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'longitude' => 'required|numeric',
@@ -53,6 +54,7 @@ class AdminHotelsController extends Controller
         $hotel->price = $request->price;
         $hotel->description = $request->description;
         $hotel->category_id = $request->category_id;
+        $hotel->region_id = $request->region_id;
         $hotel->longitude = $request->longitude;
         $hotel->latitude = $request->latitude;
         $hotel->stars = $request->stars;
@@ -106,6 +108,7 @@ class AdminHotelsController extends Controller
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'exists:users,id',
+            'region_id' => 'exists:regions,id',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
@@ -140,6 +143,10 @@ class AdminHotelsController extends Controller
         if($request->views) {
 
             $hotel->views = $request->views;
+        }
+        if($request->region_id) {
+
+            $hotel->region_id = $request->region_id;
         }
         if($request->longitude){
 

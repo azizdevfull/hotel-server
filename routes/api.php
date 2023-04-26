@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Mobile\Admin\AdminHotelsController;
 use App\Models\Reklama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,10 +9,12 @@ use App\Http\Controllers\Api\Mobile\HotelController;
 use App\Http\Controllers\Api\Mobile\PaymentController;
 use App\Http\Controllers\Api\Mobile\ProfileController;
 use App\Http\Controllers\Api\Mobile\HotelSearchController;
+use App\Http\Controllers\Api\Mobile\Admin\RegionController;
 use App\Http\Controllers\Api\Mobile\UserCategoryController;
 use App\Http\Controllers\Api\Mobile\Admin\ReklamaController;
 use App\Http\Controllers\Api\Mobile\Admin\CategoryController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUsersController;
+use App\Http\Controllers\Api\Mobile\Admin\AdminHotelsController;
 use App\Http\Controllers\Api\Mobile\Admin\PaymentSecretController;
 use App\Http\Controllers\Api\Mobile\Admin\AdminUserCategoryController;
 
@@ -40,6 +41,8 @@ Route::middleware('localization')->prefix('mobile')->group(function () {
     Route::get('/categories/{category}', [UserCategoryController::class, 'showCategory']);
     Route::get('/hotels', [HotelController::class, 'index']);
     Route::get('/hotels/{hotels}', [HotelController::class, 'show']);
+    Route::get('/regions', [RegionController::class, 'index']);
+    Route::get('/regions/{region}', [RegionController::class, 'showRegion']);
     
     Route::get('/reklama', [ReklamaController::class, 'index']);
 
@@ -90,6 +93,10 @@ Route::middleware('localization')->prefix('mobile')->group(function () {
         // Hotels Routes
         Route::post('hotels/{hotels}', [AdminHotelsController::class, 'update']);
         Route::apiResource('hotels', AdminHotelsController::class);
+
+        // Regions Routes
+        Route::apiResource('regions', RegionController::class);
+
     });
 
 });

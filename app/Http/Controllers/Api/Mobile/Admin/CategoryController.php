@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Mobile\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
@@ -11,34 +12,50 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::all();
+        $data = [];
 
-        return response()->json([
-            'status' =>  true,
-            'message' => 'Categories retrieved successfully',
-            'data' => $categories
-        ], 200);
-    }
+        foreach ($categories as $category) {
+            $categoryData = [
+                'id' => $category->id,
+                'name' => $category->name,
+            ];
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|unique:categories',
-        ]);
 
-        $category = Category::create($validatedData);
+            if(App::isLocale('ru')) {
+                $categoryData['name'] = $category->rus_name;
+            }
+
+            $data[] = $categoryData;
+        }
 
         return response()->json([
             'status' => true,
-            'message' => 'Category created successfully',
-            'data' => $category
-        ], 201);
+            'message' => __('category.all_success'),
+            'data' => $data
+        ], 200);
     }
+
+    public function store(Request $request)
+    {
+    $validatedData = $request->validate([
+        'name' => 'required|string|unique:categories',
+        'rus_name' => 'required|string|unique:categories',
+    ]);
+
+    $category = new Category();
+    $category->name = $request->name;
+    $category->rus_name = $request->rus_name;
+    $category->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => __('category.create_success'),
+        'data' => $category
+    ], 201);
+}
 
     /**
      * Display the specified resource.
@@ -46,6 +63,14 @@ class CategoryController extends Controller
     public function show(string $id)
     {
         $category = Category::find($id);
+
+        if(!$category){
+            return response()->json([
+                'status' => false,
+                'message' => __('category.not_found'),
+            ], 404);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Category retrieved successfully',
@@ -62,20 +87,21 @@ class CategoryController extends Controller
         if($category){
         $validatedData = $request->validate([
             'name' => 'required|string|unique:categories,name,' . $category->id,
+            'rus_name' => 'required|string|unique:categories,name,' . $category->id,
         ]);
 
         $category->update($validatedData);
 
         return response()->json([
             'status' => true,
-            'message' => 'Category updated successfully',
+            'message' => __('category.update_success'),
             'data' => $category
         ], 200);
     }
     else{
         return response()->json([
             'status' => false,
-            'message' => 'Category not found'
+            'message' => __('category.not_found')
             ], 404);
     }
     }
@@ -91,13 +117,13 @@ class CategoryController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Category deleted successfully'
-            ], 204);
+                'message' => __('category.destroy_success')
+            ], 200);
         }
         else{
             return response()->json([
                 'status' => false,
-                'message' => 'Category not found'
+                'message' => __('category.not_found')
                 ], 404);
         }
     }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\HotelResource;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\App;
 
 class HotelController extends Controller
 {
@@ -18,7 +19,13 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::all()->map(function($category) {
+            return [
+                'id' => $category->id,
+                'name' => App::isLocale('ru') ? $category->rus_name : $category->name
+            ];
+        });
+
         $perPage = 20;
         $query = $request->query('q');
         $page = intval($request->query('page')) ?? 1;
@@ -74,6 +81,7 @@ class HotelController extends Controller
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'region_id' => 'required|exists:regions,id',
             'longitude' => 'required|numeric',
             'latitude' => 'required|numeric',
             'stars' => 'required|numeric|between:0,5',
@@ -92,6 +100,7 @@ class HotelController extends Controller
         $hotel->price = $request->price;
         $hotel->description = $request->description;
         $hotel->category_id = $request->category_id;
+        $hotel->region_id = $request->region_id;
         $hotel->longitude = $request->longitude;
         $hotel->latitude = $request->latitude;
         $hotel->stars = $request->stars;
@@ -159,6 +168,7 @@ class HotelController extends Controller
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'region_id' => 'exists:regions,id',
             'longitude' => 'numeric',
             'latitude' => 'numeric',
             'stars' => 'numeric|between:0,5',
@@ -191,6 +201,9 @@ class HotelController extends Controller
         $hotel->price = $request->price;
         $hotel->description = $request->description;
         $hotel->category_id = $request->category_id;
+        if ($request->region_id) {
+            $hotel->region_id = $request->region_id;
+        }
         if($request->longitude){
 
             $hotel->longitude = $request->longitude;
