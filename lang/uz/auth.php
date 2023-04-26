@@ -29,5 +29,6 @@ return [
     'password' => 'Ta\'minlangan parol noto\'g\'ri.',
     'throttle' => 'Kirishga urinishlar juda ko\'p. Iltimos, :seconds soniya ichida qayta urinib ko\'ring.',
     'not_authenticated' => 'Ro\'xatdan o\'tilmagan',
+    'delete' => 'Akkount muvaffaqiyatli \'chirildi',
 
 ];

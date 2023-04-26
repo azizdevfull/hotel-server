@@ -51,7 +51,7 @@ Route::middleware('localization')->prefix('mobile')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::post('/logout', [AuthController::class, 'logoutUser'])->middleware('auth:sanctum');
-
+    Route::post('/delete-account', [AuthController::class, 'deleteMyAccount'])->middleware('auth:sanctum');
     Route::post('/verify', [AuthController::class, 'verifySms']);
 
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);

@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use mrmuminov\eskizuz\Eskiz;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\ProfileResource;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class AuthController extends Controller
 {
@@ -338,6 +340,30 @@ return response()->json([
     'message' => __('auth.logout'),
 ], 200);
 
+}
+
+public function deleteMyAccount()
+{
+    $user = Auth::user();
+
+    if(!$user){
+        return response()->json([
+            'status' => false,
+            'message' => __('auth.user_not_found'),
+        ]);
+    }
+
+    // Delete avatar if it exists
+    if ($user->avatar) {
+        Cloudinary::destroy($user->avatar);
+    }
+    $user->tokens()->delete();
+    $user->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => __('auth.delete'),
+    ]);
 }
 
 
