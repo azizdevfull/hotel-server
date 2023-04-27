@@ -32,7 +32,7 @@ class PaymentController extends Controller
         $user->save();
     
         return response()->json([
-            'message' => 'Payment successful',
+            'message' => __('payment.success'),
             'payment_id' => $payment->id,
             'user_id' => $user
             // 'secret_code' => $payment->secret_code,

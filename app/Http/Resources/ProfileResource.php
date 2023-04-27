@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\AdminUserCategory;
+use Illuminate\Support\Facades\App;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProfileResource extends JsonResource
@@ -17,15 +18,31 @@ class ProfileResource extends JsonResource
     {
 
         if($this->hotel_number <= 0 || $this->blocked > 0 ){
-            $status = 'deactive';
+            if(App::isLocale('ru')){
+                $status = 'Деактивировано';
+            }else{
+                $status = 'O\'chirilgan';
+            }
         }else{
-            $status = 'active';
+            if(App::isLocale('ru')){
+                $status = 'Активный';
+            }else{
+                $status = 'Faol';
+            }
         }
 
         if($this->blocked > 0){
-            $blocked = "Blocked";
+            if(App::isLocale('ru')){
+                $blocked = 'Заблокировано';
+            }else{
+                $blocked = 'Bloklangan';
+            }
         }else{
-            $blocked = "Unblocked";
+            if(App::isLocale('ru')){
+                $blocked = 'Разблокировано';
+            }else{
+                $blocked = 'Blokdan chiqarildi';
+            }
         }
 
         return [

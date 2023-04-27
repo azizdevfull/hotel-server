@@ -30,5 +30,8 @@ return [
     'throttle' => 'Kirishga urinishlar juda ko\'p. Iltimos, :seconds soniya ichida qayta urinib ko\'ring.',
     'not_authenticated' => 'Ro\'xatdan o\'tilmagan',
     'delete' => 'Akkount muvaffaqiyatli \'chirildi',
+    'no_money' => 'Mehmonxona yaratish uchun foydalanuvchining puli yetarli emas',
+    'blocked' => 'Siz admin tomonidan bloklangansiz',
+    'update_success' => 'Profil muvaffaqiyatli yangilandi'
 
 ];

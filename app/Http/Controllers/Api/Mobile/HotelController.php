@@ -80,6 +80,7 @@ class HotelController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'photos' => 'array|max:4',
             'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'region_id' => 'required|exists:regions,id',
             'longitude' => 'required|numeric',
@@ -108,12 +109,12 @@ class HotelController extends Controller
         if ($user->hotel_number <= 0) {
             return response([
                 'status' => false,
-                'message' => 'User does not have enough money to create a new hotel'
+                'message' => __('auth.no_money')
             ], 422);
         }else if($user->blocked > 0){
             return response([
                 'status' => false,
-                'message' => 'You are blocked by Admin'
+                'message' => __('auth.blocked')
             ], 422);
         }else{
             $user->decrement('hotel_number');
@@ -133,7 +134,7 @@ class HotelController extends Controller
             }
         return response([
             'status' => true,
-            'message' => 'Hotel created successfully',
+            'message' => __('hotel.create_success'),
             'data' => new HotelResource($hotel)
         ], 201);
     }
@@ -147,7 +148,7 @@ class HotelController extends Controller
         if(!$hotel){
             return response()->json([
                'status' => false,
-               'message' => 'Hotel not found'
+               'message' => __('hotel.not_found')
             ], 404);
         }
         $hotel->increment('views');
@@ -167,6 +168,7 @@ class HotelController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'photos' => 'array|max:4',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'region_id' => 'exists:regions,id',
             'longitude' => 'numeric',
@@ -185,7 +187,7 @@ class HotelController extends Controller
         if (!$hotel) {
             return response()->json([
                 'status' => false,
-                'message' => 'Hotel not found'
+                'message' => __('hotel.not_found')
             ], 404);
         }
     
@@ -193,7 +195,7 @@ class HotelController extends Controller
         if ($hotel->user_id !== $user->id) {
             return response([
                 'status' => 'error',
-                'message' => 'You are not authorized to update this hotel'
+                'message' => __('hotel.no_access')
             ], 403);
         }
     
@@ -237,7 +239,7 @@ class HotelController extends Controller
     
         return response([
             'status' => true,
-            'message' => 'Hotel updated successfully',
+            'message' => __('hotel.update_success'),
         ], 200);
     }
     
@@ -254,7 +256,7 @@ class HotelController extends Controller
         if(!$hotel){
             return response()->json([
               'status' => false,
-              'message' => 'Hotel not found'
+              'message' => __('hotel.not_found'),
             ], 404);
         }
         $user = Auth::user();
@@ -262,7 +264,7 @@ class HotelController extends Controller
         if ($hotel->user_id !== $user->id) {
             return response([
                'status' => 'error',
-               'message' => 'You are not authorized to delete this hotel'
+               'message' => __('hotel.no_delete_access')
             ], 403);
         }
         foreach ($hotel->photos as $photo) {
@@ -272,7 +274,7 @@ class HotelController extends Controller
         $hotel->delete();
         return response([
            'status' => true,
-           'message' => 'Hotel deleted successfully'
+           'message' => __('hotel.delete_success')
         ], 200);
     }
 }

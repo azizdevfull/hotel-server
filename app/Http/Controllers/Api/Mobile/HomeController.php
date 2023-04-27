@@ -6,6 +6,7 @@ use App\Models\Hotel;
 use App\Models\Category;
 use App\Models\HomeView;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HotelResource;
 
@@ -18,7 +19,12 @@ class HomeController extends Controller
         
         $perPage = $request->get('per_page', 20);
         $hotels = Hotel::paginate($perPage);;
-        $categories = Category::all();
+        $categories = Category::all()->map(function($category) {
+            return [
+                'id' => $category->id,
+                'name' => App::isLocale('ru') ? $category->rus_name : $category->name
+            ];
+        });
 
         $hotelPaginate = [
             'total' => $hotels->total(),

@@ -18,7 +18,6 @@ class ProfileController extends Controller
     public function Profile()
     {
         $user = Auth::user();
-        $user->increment('views');
         return response()->json([
             'status' => true,
             'user' => new ProfileResource($user),
@@ -75,7 +74,7 @@ class ProfileController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'Profile updated successfully.',
+            'message' => __('auth.update_success'),
             'user' => new ProfileResource($user),
         ], 200);
     }
@@ -86,9 +85,10 @@ class ProfileController extends Controller
         if (!$user) {
             return response([
                 'status' => false,
-                'message' => 'User not found'
+                'message' => __('auth.user_not_found'),
             ], 404);
         }
+        $user->increment('views');
         $hotels = $user->hotels;
         
         return response()->json([

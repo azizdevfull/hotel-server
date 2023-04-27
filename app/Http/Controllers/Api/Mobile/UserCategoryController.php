@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers\Api\Mobile;
 
+use App\Models\Hotel;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HotelResource;
-use App\Models\Hotel;
 
 class UserCategoryController extends Controller
 {
     public function index(){
-        $categories = Category::all();
+        $categories = Category::all()->map(function($category) {
+            return [
+                'id' => $category->id,
+                'name' => App::isLocale('ru') ? $category->rus_name : $category->name
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -27,6 +33,13 @@ class UserCategoryController extends Controller
                 'message' => __('category.not_found'),
             ]);
         }
+
+        if(App::isLocale('ru')){
+            $category->name = $category->rus_name;
+        }else{
+            $category->name = $category->name;
+        }
+
         return response()->json([
             'status' => true,
             'category' => [
@@ -47,6 +60,12 @@ class UserCategoryController extends Controller
                 'status' => false,
                 'message' => __('category.not_found'),
             ], 404);
+        }
+
+        if(App::isLocale('ru')){
+            $category->name = $category->rus_name;
+        }else{
+            $category->name = $category->name;
         }
     
         $perPage = 20;
@@ -74,7 +93,10 @@ class UserCategoryController extends Controller
     
         return response()->json([
             'status' => true,
-            'category' => $category,
+            'category' => [
+                'id' => $category->id,
+                'name' => $category->name,
+            ],
             'message' => "",
             'data' => [
                 'item' => HotelResource::collection($products),
