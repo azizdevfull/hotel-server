@@ -54,7 +54,7 @@ class ReklamaController extends Controller
         }
         return response([
             'status' => true,
-            'message' => 'Reklama created successfully',
+            'message' => __('reklama.create_success'),
             'data' => new ReklamaResource($reklama)
         ], 201);
     }
@@ -69,7 +69,7 @@ class ReklamaController extends Controller
         if(!$reklama){
             return response()->json([
                'status' => 'error',
-               'message' => 'Reklama not found'
+               'message' => __('reklama.not_found')
             ], 404);
         }
         return response()->json([
@@ -98,7 +98,7 @@ class ReklamaController extends Controller
         if(!$reklama){
             return response([
                'status' => 'error',
-               'message' => 'Reklama not found'
+               'message' => __('reklama.not_found')
             ], 404);
         }
       
@@ -120,7 +120,7 @@ class ReklamaController extends Controller
     
         return response([
             'status' => true,
-            'message' => 'Reklama updated successfully',
+            'message' => __('reklama.update.success'),
             'data' => new ReklamaResource($reklama)
         ], 200);
     }
@@ -134,7 +134,7 @@ class ReklamaController extends Controller
         if(!$reklama){
             return response([
               'status' => 'error',
-              'message' => 'Reklama not found'
+              'message' => __('reklama.not_found')
             ], 404);
         }
         // delete the associated images from cloudinary
@@ -147,7 +147,7 @@ class ReklamaController extends Controller
     
         return response([
             'status' => true,
-            'message' => 'Reklama deleted successfully'
+            'message' => __('reklama.destroy_success')
         ], 200);
     }
     
