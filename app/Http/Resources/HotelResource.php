@@ -25,15 +25,22 @@ class HotelResource extends JsonResource
                 }else{
                     $region_id = $region->name;
                 }
-            }else if(0 == $this->region_id){
-                $region_id = "Tashkent";
+            }else{
+                $region_id = null;
             }
         }
+        
       
-        if(App::isLocale('ru')){
-            $this->category->name = $this->category->rus_name;
+        if($this->category){
+            $category_name = $this->category->name;
+            
+                    if(App::isLocale('ru')){
+                        $category_name = $this->category->rus_name;
+                    }else{
+                        $category_name = $this->category->name;
+                    }
         }else{
-            $this->category->name = $this->category->name;
+            $category_name = null;
         }
 
         return [
@@ -41,7 +48,7 @@ class HotelResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'description' => $this->description,
-            'category' => $this->category->name,
+            'category' => $category_name,
             'user' => $this->user->username,
             'region' => $region_id,
             'views' => $this->views,
