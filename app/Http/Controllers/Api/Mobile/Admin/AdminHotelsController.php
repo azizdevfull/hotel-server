@@ -74,7 +74,7 @@ class AdminHotelsController extends Controller
             }
         return response([
             'status' => true,
-            'message' => 'Hotel created successfully',
+            'message' => __('hotel.create_success'),
             'data' => new HotelsResource($hotel)
         ], 201);
     }
@@ -88,7 +88,7 @@ class AdminHotelsController extends Controller
         if(!$hotel){
             return response()->json([
                'status' => false,
-               'message' => 'Hotel not found'
+               'message' => __('hotel.not_found'),
             ], 404);
         }
         return response()->json([
@@ -127,7 +127,7 @@ class AdminHotelsController extends Controller
         if (!$hotel) {
             return response()->json([
                 'status' => false,
-                'message' => 'Hotel not found'
+                'message' => __('hotel.not_found')
             ], 404);
         }
     
@@ -181,7 +181,7 @@ class AdminHotelsController extends Controller
     
         return response([
             'status' => true,
-            'message' => 'Hotel updated successfully',
+            'message' => __('hotel.update_success')
         ], 200);
     }
 
@@ -194,7 +194,7 @@ class AdminHotelsController extends Controller
         if(!$hotel){
             return response()->json([
               'status' => false,
-              'message' => 'Hotel not found'
+              'message' => __('hotel.not_found')
             ], 404);
         }
 
@@ -205,7 +205,7 @@ class AdminHotelsController extends Controller
         $hotel->delete();
         return response([
            'status' => true,
-           'message' => 'Hotel deleted successfully'
+           'message' => __('hotel.destroy_success')
         ], 200);
     }
 }
