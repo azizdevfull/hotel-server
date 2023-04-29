@@ -34,7 +34,7 @@ class PaymentSecretController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Payment secret code created successfully',
+            'message' => __('pay_secret.create_success'),
             'secret_code' => $paymentSecret,
         ]);
     }
@@ -56,7 +56,7 @@ class PaymentSecretController extends Controller
         if(!$paymentSecret){
             return response()->json([
                'status' => false,
-               'message' => 'Payment secret code not found',
+               'message' => __('pay_secret.not_found'),
             ]);
         }
 
@@ -68,7 +68,7 @@ class PaymentSecretController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Payment secret code updated successfully',
+            'message' => __('pay_secret.update_success'),
             'secret_code' => $paymentSecret,
         ]);
     }
@@ -83,7 +83,7 @@ class PaymentSecretController extends Controller
         if (!$paymentSecret) {
             return response()->json([
                 'status' => false,
-                'message' => 'Payment secret code not found',
+                'message' => __('pay_secret.not_found')
             ], 404);
         }
 
@@ -91,7 +91,7 @@ class PaymentSecretController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Payment secret code deleted successfully',
+            'message' => __('pay_secret.destroy_success')
         ]);
     }
 }
