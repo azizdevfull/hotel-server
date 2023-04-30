@@ -252,7 +252,7 @@ public function forgotPassword(Request $request)
     $eskiz->requestAuthLogin();
     $result = $eskiz->requestSmsSend(
         '4546',
-        'Your Reset code: '.$code,
+        'Sizning maxsus tasdiqlovchi kodingiz: ' .$code. PHP_EOL .' Kodni hech kimga bermang!',
         $request->phone,
         '1', // your-message-identity, a special identity to message
         ''
